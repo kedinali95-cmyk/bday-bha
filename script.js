@@ -83,6 +83,44 @@ function renderCountdown(){
 
   const noteIndex = Math.min(Math.max(daysLeft, 0), NOTES.length - 1);
   noteEl.textContent = NOTES[noteIndex];
+
+  // switch from the daily countdown view to the birthday envelope
+  // reveal automatically once her birthday arrives
+  const envelopeSection = document.getElementById('envelopeSection');
+  const notesSection = document.getElementById('notesSection');
+  if (daysLeft <= 0){
+    envelopeSection.style.display = 'block';
+    notesSection.style.display = 'none';
+  } else {
+    envelopeSection.style.display = 'none';
+    notesSection.style.display = 'block';
+  }
+}
+
+/* ---------------------------------------------
+   Envelope + love letter
+--------------------------------------------- */
+function initEnvelope(){
+  const letterTextEl = document.getElementById('letterText');
+  if (letterTextEl) letterTextEl.textContent = LOVE_LETTER;
+
+  const envelope = document.getElementById('envelope');
+  const loveLetter = document.getElementById('loveLetter');
+  const hint = document.getElementById('envelopeHint');
+  if (!envelope) return;
+
+  envelope.addEventListener('click', () => {
+    const isOpen = envelope.classList.toggle('open');
+    envelope.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+    if (isOpen){
+      hint.style.opacity = '0';
+      setTimeout(() => loveLetter.classList.add('visible'), 350);
+    } else {
+      loveLetter.classList.remove('visible');
+      hint.style.opacity = '1';
+    }
+  });
 }
 
 /* ---------------------------------------------
@@ -134,3 +172,4 @@ document.addEventListener('keydown', (e) => {
 
 renderCountdown();
 spawnHearts();
+initEnvelope();
