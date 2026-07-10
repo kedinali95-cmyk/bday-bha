@@ -183,6 +183,135 @@ section{
 }
 
 /* ---------------------------------------------
+   Envelope & love letter (birthday reveal)
+--------------------------------------------- */
+.envelope-section{
+  background: var(--cream);
+  display:none; /* shown by script.js only from her birthday onward */
+}
+
+.envelope-hint{
+  font-family: var(--font-script);
+  font-size: 1.3rem;
+  color: var(--plum-mid);
+  margin-bottom: 2rem;
+}
+
+.envelope{
+  position:relative;
+  width: 260px;
+  height: 170px;
+  margin: 0 auto;
+  background:none;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  perspective: 1000px;
+}
+
+.envelope-back{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, var(--rose) 0%, var(--plum-mid) 100%);
+  border-radius: 6px;
+  box-shadow: 0 14px 30px rgba(58,30,54,0.25);
+}
+
+.envelope-letter-peek{
+  position:absolute;
+  left: 8%;
+  right: 8%;
+  top: -6%;
+  height: 90%;
+  background: var(--cream);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  transition: transform 0.5s ease 0.15s;
+  z-index:1;
+}
+
+.envelope-flap{
+  position:absolute;
+  top:0; left:0; right:0;
+  height: 100%;
+  background: linear-gradient(135deg, var(--plum-mid) 0%, var(--plum-deep) 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 58%);
+  transform-origin: top center;
+  transition: transform 0.5s ease;
+  z-index:2;
+  border-radius: 6px 6px 0 0;
+}
+
+.envelope-seal{
+  position:absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:3;
+  color: var(--cream);
+  font-size: 1.4rem;
+  transition: opacity 0.25s ease;
+}
+
+.envelope.open .envelope-flap{
+  transform: rotateX(180deg);
+}
+.envelope.open .envelope-letter-peek{
+  transform: translateY(-38%);
+}
+.envelope.open .envelope-seal{
+  opacity:0;
+}
+
+.love-letter{
+  max-width: 480px;
+  margin: 2.5rem auto 0;
+  background: var(--blush);
+  border-radius: 18px;
+  padding: 2.25rem 2rem;
+  text-align:left;
+  box-shadow: 0 16px 34px rgba(58,30,54,0.16);
+
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transition: max-height 0.6s ease, opacity 0.6s ease, margin 0.6s ease, padding 0.6s ease;
+}
+
+.love-letter.visible{
+  max-height: 1200px;
+  opacity:1;
+}
+
+.letter-text{
+  font-family: var(--font-script);
+  font-size: 1.55rem;
+  line-height:1.55;
+  color: var(--plum-deep);
+  white-space: pre-line;
+}
+
+.letter-signoff{
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--plum-mid);
+  margin-top: 1.5rem;
+}
+
+.letter-photos{
+  display:flex;
+  justify-content:center;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+  flex-wrap:wrap;
+}
+
+.letter-photos .polaroid{ width: 130px; }
+.letter-photos .polaroid img{ height: 130px; }
+.letter-photos .polaroid.placeholder::after{ height: 130px; }
+
+/* ---------------------------------------------
    Polaroid gallery
 --------------------------------------------- */
 .gallery-section{ background: var(--cream); }
@@ -350,6 +479,13 @@ section{
   .footer-section{ padding-bottom: 3.5rem; }
   .signoff{ font-size: 1.05rem; }
   .signoff-sub{ font-size: 1.25rem; }
+
+  .envelope{ width: 220px; height: 145px; }
+  .love-letter{ padding: 1.75rem 1.4rem; margin-top: 2rem; }
+  .letter-text{ font-size: 1.35rem; }
+  .letter-photos .polaroid{ width: 110px; }
+  .letter-photos .polaroid img{ height: 110px; }
+  .letter-photos .polaroid.placeholder::after{ height: 110px; }
 }
 
 @media (max-width: 480px){
