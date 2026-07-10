@@ -28,10 +28,39 @@
       <div class="date-pill" id="datePill">Counting down to July 31</div>
     </section>
 
-    <section class="notes-section">
+    <section class="notes-section" id="notesSection">
       <p class="section-tag">reasons I can't wait</p>
       <h2 class="section-title">One little note a day</h2>
       <p class="note-of-day" id="noteOfDay">Loading today's note&hellip;</p>
+    </section>
+
+    <section class="envelope-section" id="envelopeSection">
+      <p class="section-tag">for you</p>
+      <h2 class="section-title">Happy Birthday</h2>
+      <p class="envelope-hint" id="envelopeHint">Tap the envelope to open it</p>
+
+      <button class="envelope" id="envelope" type="button" aria-expanded="false" aria-label="Open your birthday letter">
+        <span class="envelope-back"></span>
+        <span class="envelope-letter-peek"></span>
+        <span class="envelope-flap"></span>
+        <span class="envelope-seal">&#9825;</span>
+      </button>
+
+      <article class="love-letter" id="loveLetter">
+        <p class="letter-text" id="letterText"></p>
+        <p class="letter-signoff">Forever yours,<br>Me</p>
+
+        <div class="letter-photos">
+          <figure class="polaroid tilt-a">
+            <img src="photos/letter1.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
+            <figcaption>&#9825;</figcaption>
+          </figure>
+          <figure class="polaroid tilt-b">
+            <img src="photos/letter2.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
+            <figcaption>&#9825;</figcaption>
+          </figure>
+        </div>
+      </article>
     </section>
 
     <section class="gallery-section">
