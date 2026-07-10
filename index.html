@@ -40,27 +40,33 @@
 
       <div class="polaroid-strip">
         <figure class="polaroid tilt-a">
-          <img src="photos/1.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <img src="photos/1.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
           <figcaption>&#9825;</figcaption>
         </figure>
         <figure class="polaroid tilt-b">
-          <img src="photos/2.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <img src="photos/2.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
           <figcaption>&#9825;</figcaption>
         </figure>
         <figure class="polaroid tilt-c">
-          <img src="photos/3.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <img src="photos/3.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
           <figcaption>&#9825;</figcaption>
         </figure>
         <figure class="polaroid tilt-d">
-          <img src="photos/4.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <img src="photos/4.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
           <figcaption>&#9825;</figcaption>
         </figure>
         <figure class="polaroid tilt-a">
-          <img src="photos/5.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <img src="photos/5.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
           <figcaption>&#9825;</figcaption>
         </figure>
       </div>
     </section>
+
+    <!-- fullscreen photo viewer -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+      <button class="lightbox-close" type="button" aria-label="Close photo" onclick="closeLightbox()">&times;</button>
+      <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    </div>
 
     <section class="footer-section">
       <p class="signoff">Until then, I'll be here counting the days.</p>
