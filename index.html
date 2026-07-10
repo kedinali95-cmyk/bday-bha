@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counting Down to You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Caveat:wght@500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ambient floating hearts -->
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">a little countdown, just for you</p>
+
+      <div class="count-wrap">
+        <span class="count-number" id="countNumber">20</span>
+        <span class="count-label" id="countLabel">days until your birthday</span>
+      </div>
+
+      <p class="hero-note" id="heroNote">Every day that passes, I get a little more excited to celebrate you.</p>
+
+      <div class="date-pill" id="datePill">Counting down to July 31</div>
+    </section>
+
+    <section class="notes-section">
+      <p class="section-tag">reasons I can't wait</p>
+      <h2 class="section-title">One little note a day</h2>
+      <p class="note-of-day" id="noteOfDay">Loading today's note&hellip;</p>
+    </section>
+
+    <section class="gallery-section">
+      <p class="section-tag">us, so far</p>
+      <h2 class="section-title">A few of my favorites</h2>
+
+      <div class="polaroid-strip">
+        <figure class="polaroid tilt-a">
+          <img src="photos/1.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <figcaption>&#9825;</figcaption>
+        </figure>
+        <figure class="polaroid tilt-b">
+          <img src="photos/2.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <figcaption>&#9825;</figcaption>
+        </figure>
+        <figure class="polaroid tilt-c">
+          <img src="photos/3.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <figcaption>&#9825;</figcaption>
+        </figure>
+        <figure class="polaroid tilt-d">
+          <img src="photos/4.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <figcaption>&#9825;</figcaption>
+        </figure>
+        <figure class="polaroid tilt-a">
+          <img src="photos/5.jpg" alt="A favorite memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')">
+          <figcaption>&#9825;</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="footer-section">
+      <p class="signoff">Until then, I'll be here counting the days.</p>
+      <p class="signoff-sub">Happy almost-birthday. I love you.</p>
+    </section>
+  </main>
+
+<script src="script.js"></script>
+</body>
+</html>

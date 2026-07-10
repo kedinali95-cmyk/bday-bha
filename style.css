@@ -1,0 +1,331 @@
+/* ---------------------------------------------
+   Tokens
+--------------------------------------------- */
+:root{
+  --plum-deep:  #3A1E36;
+  --plum-mid:   #6B3A5E;
+  --blush:      #F6DFE3;
+  --rose:       #E4A6B4;
+  --gold:       #D8A85E;
+  --cream:      #FBF3EE;
+  --ink:        #2B1B2E;
+
+  --font-display: 'Playfair Display', serif;
+  --font-script:  'Caveat', cursive;
+  --font-body:    'Nunito', sans-serif;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, var(--plum-deep) 0%, var(--plum-mid) 45%, var(--cream) 45%, var(--cream) 100%);
+  color: var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+}
+
+/* ---------------------------------------------
+   Ambient hearts
+--------------------------------------------- */
+.hearts{
+  position:fixed;
+  inset:0;
+  height:60vh;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.heart{
+  position:absolute;
+  bottom:-10%;
+  color: rgba(246, 223, 227, 0.35);
+  font-size: 1.4rem;
+  animation: float-up linear infinite;
+  user-select:none;
+}
+@keyframes float-up{
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+  10%  { opacity:1; }
+  90%  { opacity:1; }
+  100% { transform: translateY(-70vh) translateX(var(--drift, 20px)) rotate(20deg); opacity:0; }
+}
+
+/* ---------------------------------------------
+   Hero
+--------------------------------------------- */
+main{ position:relative; z-index:1; }
+
+.hero{
+  min-height: 62vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding: 3rem 1.25rem 3.5rem;
+  color: var(--cream);
+}
+
+.eyebrow{
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  color: var(--rose);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.count-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  line-height:1;
+}
+
+.count-number{
+  font-family: var(--font-display);
+  font-weight:600;
+  font-size: clamp(6rem, 22vw, 11rem);
+  background: linear-gradient(180deg, #FBF3EE 0%, var(--rose) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.count-label{
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blush);
+  margin-top: 0.5rem;
+  font-weight:600;
+}
+
+.hero-note{
+  max-width: 26ch;
+  margin-top: 1.75rem;
+  font-size: 1.05rem;
+  color: rgba(251,243,238,0.85);
+  line-height:1.5;
+}
+
+.date-pill{
+  margin-top: 2rem;
+  padding: 0.55rem 1.25rem;
+  border: 1px solid rgba(246,223,227,0.35);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--blush);
+}
+
+/* ---------------------------------------------
+   Shared section styling
+--------------------------------------------- */
+section{
+  padding: 3.5rem 1.25rem;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align:center;
+}
+
+.section-tag{
+  font-family: var(--font-script);
+  font-size: 1.3rem;
+  color: var(--plum-mid);
+}
+
+.section-title{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin-top: 0.25rem;
+  margin-bottom: 1.75rem;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------
+   Note of the day
+--------------------------------------------- */
+.notes-section{
+  background: var(--cream);
+}
+
+.note-of-day{
+  font-family: var(--font-script);
+  font-size: 1.8rem;
+  color: var(--plum-deep);
+  max-width: 34ch;
+  margin: 0 auto;
+  line-height:1.4;
+  padding: 1.75rem 2rem;
+  background: var(--blush);
+  border-radius: 18px;
+  position:relative;
+}
+
+.note-of-day::before{
+  content: '\275D';
+  position:absolute;
+  top: -0.6rem;
+  left: 1.2rem;
+  font-size: 2.5rem;
+  color: var(--rose);
+  font-family: var(--font-display);
+}
+
+/* ---------------------------------------------
+   Polaroid gallery
+--------------------------------------------- */
+.gallery-section{ background: var(--cream); }
+
+.polaroid-strip{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap: 1.75rem 1.25rem;
+  padding-top: 1rem;
+}
+
+.polaroid{
+  background: #fff;
+  padding: 0.75rem 0.75rem 1.4rem;
+  box-shadow: 0 10px 22px rgba(58,30,54,0.18);
+  width: 160px;
+  border-radius: 3px;
+  transition: transform 0.25s ease;
+}
+.polaroid:hover{ transform: translateY(-6px) rotate(0deg) !important; }
+
+.polaroid img{
+  width:100%;
+  height: 160px;
+  object-fit: cover;
+  display:block;
+  background: var(--blush);
+}
+
+.polaroid figcaption{
+  font-family: var(--font-script);
+  font-size: 1.05rem;
+  text-align:center;
+  color: var(--plum-mid);
+  margin-top: 0.5rem;
+}
+
+/* placeholder look when an image fails to load */
+.polaroid.placeholder img{
+  visibility:hidden;
+  position:relative;
+}
+.polaroid.placeholder{ position:relative; }
+.polaroid.placeholder::after{
+  content: "add photo";
+  position:absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  height:160px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: repeating-linear-gradient(135deg, var(--blush), var(--blush) 10px, #f0cdd4 10px, #f0cdd4 20px);
+  color: var(--plum-deep);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight:600;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  border-radius: 2px;
+}
+
+.tilt-a{ transform: rotate(-4deg); }
+.tilt-b{ transform: rotate(3deg); }
+.tilt-c{ transform: rotate(-2deg); }
+.tilt-d{ transform: rotate(5deg); }
+
+/* ---------------------------------------------
+   Footer
+--------------------------------------------- */
+.footer-section{
+  background: var(--cream);
+  padding-top: 1rem;
+  padding-bottom: 5rem;
+}
+
+.signoff{
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--plum-deep);
+}
+
+.signoff-sub{
+  font-family: var(--font-script);
+  font-size: 1.4rem;
+  color: var(--rose);
+  margin-top: 0.5rem;
+}
+
+/* ---------------------------------------------
+   Responsive
+--------------------------------------------- */
+@media (max-width: 600px){
+  .hero{ min-height: 56vh; padding: 2.5rem 1rem 3rem; }
+  .eyebrow{ font-size: 1.25rem; }
+  .count-label{ font-size: 0.9rem; letter-spacing: 0.06em; }
+  .date-pill{ font-size: 0.78rem; padding: 0.5rem 1rem; }
+
+  section{ padding: 3rem 1.1rem; }
+  .section-tag{ font-size: 1.15rem; }
+  .section-title{ margin-bottom: 1.25rem; }
+
+  .note-of-day{
+    font-size: 1.4rem;
+    padding: 1.5rem 1.4rem;
+    max-width: none;
+  }
+  .note-of-day::before{ font-size: 2rem; top: -0.5rem; left: 1rem; }
+
+  .polaroid-strip{ gap: 1.25rem 0.9rem; }
+  .tilt-a{ transform: rotate(-2.5deg); }
+  .tilt-b{ transform: rotate(2deg); }
+  .tilt-c{ transform: rotate(-1.5deg); }
+  .tilt-d{ transform: rotate(3deg); }
+
+  .footer-section{ padding-bottom: 3.5rem; }
+  .signoff{ font-size: 1.05rem; }
+  .signoff-sub{ font-size: 1.25rem; }
+}
+
+@media (max-width: 480px){
+  .polaroid{ width: 42vw; padding: 0.6rem 0.6rem 1.1rem; }
+  .polaroid img{ height: 42vw; }
+  .polaroid.placeholder::after{ height: 42vw; font-size: 0.7rem; }
+  .polaroid figcaption{ font-size: 0.95rem; margin-top: 0.35rem; }
+}
+
+@media (max-width: 600px){
+  .heart{ font-size: 1.1rem; }
+}
+
+@media (max-width: 360px){
+  .count-number{ font-size: clamp(4.5rem, 24vw, 7rem); }
+  .note-of-day{ font-size: 1.25rem; padding: 1.3rem 1.1rem; }
+}
+
+/* ---------------------------------------------
+   Focus visibility
+--------------------------------------------- */
+a:focus-visible, button:focus-visible{
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
