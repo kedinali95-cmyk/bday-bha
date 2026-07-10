@@ -96,5 +96,30 @@ function spawnHearts(){
   }
 }
 
+/* ---------------------------------------------
+   Lightbox (tap a photo to view it full-screen)
+--------------------------------------------- */
+function openLightbox(imgEl){
+  // don't open for broken/placeholder images
+  if (imgEl.closest('.polaroid').classList.contains('placeholder')) return;
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  lightboxImg.src = imgEl.src;
+  lightboxImg.alt = imgEl.alt;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(){
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
 renderCountdown();
 spawnHearts();
