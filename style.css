@@ -183,104 +183,156 @@ section{
 }
 
 /* ---------------------------------------------
-   Envelope & love letter (birthday reveal)
+   Floating envelope (locked until her birthday)
 --------------------------------------------- */
-.envelope-section{
-  background: var(--cream);
-  display:none; /* shown by script.js only from her birthday onward */
+.envelope-float{
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--plum-mid) 100%);
+  box-shadow: 0 10px 24px rgba(58,30,54,0.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index: 40;
+  animation: envelope-drift 6s ease-in-out infinite;
 }
 
-.envelope-hint{
+.envelope-float-icon{
+  font-size: 1.6rem;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+}
+
+.envelope-float-lock{
+  position:absolute;
+  top: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--plum-deep);
+  color: var(--cream);
+  font-size: 0.7rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.envelope-float.unlocked{
+  animation: envelope-drift 6s ease-in-out infinite, envelope-glow 2.2s ease-in-out infinite;
+}
+.envelope-float.unlocked .envelope-float-lock{
+  display:none;
+}
+
+.envelope-float.shake{
+  animation: envelope-shake 0.4s ease;
+}
+
+@keyframes envelope-drift{
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-6px, -10px); }
+  50%      { transform: translate(4px, -4px); }
+  75%      { transform: translate(-4px, 6px); }
+}
+
+@keyframes envelope-glow{
+  0%, 100% { box-shadow: 0 10px 24px rgba(58,30,54,0.35), 0 0 0 0 rgba(216,168,94,0.55); }
+  50%      { box-shadow: 0 10px 24px rgba(58,30,54,0.35), 0 0 0 12px rgba(216,168,94,0); }
+}
+
+@keyframes envelope-shake{
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+.envelope-toast{
+  position: fixed;
+  right: 1.25rem;
+  bottom: 5.25rem;
+  background: var(--plum-deep);
+  color: var(--cream);
+  padding: 0.55rem 1.1rem;
+  border-radius: 14px;
+  font-family: var(--font-script);
+  font-size: 1.15rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events:none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 41;
+  white-space: nowrap;
+}
+
+.envelope-toast.show{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------
+   Love letter modal (unlocked from her birthday)
+--------------------------------------------- */
+.letter-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(43, 27, 46, 0.92);
+  z-index: 60;
+  align-items:center;
+  justify-content:center;
+  padding: 1.5rem;
+}
+
+.letter-modal.open{
+  display:flex;
+}
+
+.letter-card{
+  background: var(--blush);
+  max-width: 480px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  padding: 2.25rem 2rem;
+  position:relative;
+  text-align:left;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.letter-close{
+  position:absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: rgba(58,30,54,0.08);
+  border: 1px solid rgba(58,30,54,0.15);
+  color: var(--plum-deep);
+  font-size: 1.5rem;
+  line-height:1;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.letter-eyebrow{
   font-family: var(--font-script);
   font-size: 1.3rem;
   color: var(--plum-mid);
-  margin-bottom: 2rem;
-}
-
-.envelope{
-  position:relative;
-  width: 260px;
-  height: 170px;
-  margin: 0 auto;
-  background:none;
-  border:none;
-  padding:0;
-  cursor:pointer;
-  perspective: 1000px;
-}
-
-.envelope-back{
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, var(--rose) 0%, var(--plum-mid) 100%);
-  border-radius: 6px;
-  box-shadow: 0 14px 30px rgba(58,30,54,0.25);
-}
-
-.envelope-letter-peek{
-  position:absolute;
-  left: 8%;
-  right: 8%;
-  top: -6%;
-  height: 90%;
-  background: var(--cream);
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-  transition: transform 0.5s ease 0.15s;
-  z-index:1;
-}
-
-.envelope-flap{
-  position:absolute;
-  top:0; left:0; right:0;
-  height: 100%;
-  background: linear-gradient(135deg, var(--plum-mid) 0%, var(--plum-deep) 100%);
-  clip-path: polygon(0 0, 100% 0, 50% 58%);
-  transform-origin: top center;
-  transition: transform 0.5s ease;
-  z-index:2;
-  border-radius: 6px 6px 0 0;
-}
-
-.envelope-seal{
-  position:absolute;
-  top: 42%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index:3;
-  color: var(--cream);
-  font-size: 1.4rem;
-  transition: opacity 0.25s ease;
-}
-
-.envelope.open .envelope-flap{
-  transform: rotateX(180deg);
-}
-.envelope.open .envelope-letter-peek{
-  transform: translateY(-38%);
-}
-.envelope.open .envelope-seal{
-  opacity:0;
-}
-
-.love-letter{
-  max-width: 480px;
-  margin: 2.5rem auto 0;
-  background: var(--blush);
-  border-radius: 18px;
-  padding: 2.25rem 2rem;
-  text-align:left;
-  box-shadow: 0 16px 34px rgba(58,30,54,0.16);
-
-  max-height:0;
-  opacity:0;
-  overflow:hidden;
-  transition: max-height 0.6s ease, opacity 0.6s ease, margin 0.6s ease, padding 0.6s ease;
-}
-
-.love-letter.visible{
-  max-height: 1200px;
-  opacity:1;
+  margin-bottom: 0.5rem;
 }
 
 .letter-text{
