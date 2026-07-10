@@ -5,6 +5,17 @@ const BIRTHDAY_DATE = new Date('2026-07-20T00:00:00'); // <-- set her actual bir
 const BIRTHDAY_DISPLAY = 'July 20'; // <-- shown in the little pill under the countdown
 
 /* ---------------------------------------------
+   The letter she'll find inside the envelope,
+   revealed from her birthday onward. Edit freely —
+   use a blank line for a paragraph break.
+--------------------------------------------- */
+const LOVE_LETTER = `Happy birthday to the person who makes my whole world softer.
+
+I made this little countdown because I wanted you to feel celebrated every single day leading up to today — not just today. But especially today.
+
+I hope this year brings you everything you deserve, and I hope you already know how loved you are.`;
+
+/* ---------------------------------------------
    One little note per day of the countdown.
    Day 20 shows first, day 1 shows the day before,
    day 0 is birthday day itself.
