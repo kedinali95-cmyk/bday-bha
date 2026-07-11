@@ -11,21 +11,24 @@
 </head>
 <body>
 
-  <!-- ambient floating hearts -->
-  <div class="hearts" id="hearts" aria-hidden="true"></div>
+  <!-- ambient floating hearts + photos live inside .hero now, see below -->
 
   <main>
     <section class="hero">
-      <p class="eyebrow">a little countdown, just for you</p>
+      <div class="hearts" id="hearts" aria-hidden="true"></div>
 
-      <div class="count-wrap">
-        <span class="count-number" id="countNumber">20</span>
-        <span class="count-label" id="countLabel">days until your birthday</span>
+      <div class="hero-content">
+        <p class="eyebrow">a little countdown, just for you</p>
+
+        <div class="count-wrap">
+          <span class="count-number" id="countNumber">20</span>
+          <span class="count-label" id="countLabel">days until your birthday</span>
+        </div>
+
+        <p class="hero-note" id="heroNote">Every day that passes, I get a little more excited to celebrate you.</p>
+
+        <div class="date-pill" id="datePill">Counting down to July 31</div>
       </div>
-
-      <p class="hero-note" id="heroNote">Every day that passes, I get a little more excited to celebrate you.</p>
-
-      <div class="date-pill" id="datePill">Counting down to July 31</div>
     </section>
 
     <section class="notes-section" id="notesSection">
