@@ -36,9 +36,8 @@ body{
    Ambient hearts
 --------------------------------------------- */
 .hearts{
-  position:fixed;
+  position:absolute;
   inset:0;
-  height:60vh;
   pointer-events:none;
   overflow:hidden;
   z-index:0;
@@ -64,6 +63,9 @@ body{
 main{ position:relative; z-index:1; }
 
 .hero{
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
   min-height: 62vh;
   display:flex;
   flex-direction:column;
@@ -72,6 +74,14 @@ main{ position:relative; z-index:1; }
   text-align:center;
   padding: 3rem 1.25rem 3.5rem;
   color: var(--cream);
+}
+
+.hero-content{
+  position: relative;
+  z-index: 1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 .eyebrow{
@@ -186,9 +196,9 @@ section{
    Floating envelope (locked until her birthday)
 --------------------------------------------- */
 .envelope-float{
-  position: fixed;
-  left: calc(100vw - 84px);
-  top: calc(100vh - 84px);
+  position: absolute;
+  left: calc(100% - 84px);
+  top: calc(100% - 84px);
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -199,7 +209,7 @@ section{
   align-items:center;
   justify-content:center;
   cursor: grab;
-  z-index: 40;
+  z-index: 2;
   animation: envelope-drift 6s ease-in-out infinite;
   touch-action: none;
   user-select: none;
@@ -376,9 +386,9 @@ section{
    Floating gift (locked except on the 14th)
 --------------------------------------------- */
 .gift-float{
-  position: fixed;
+  position: absolute;
   left: 1.25rem;
-  top: calc(100vh - 84px);
+  top: calc(100% - 84px);
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -389,7 +399,7 @@ section{
   align-items:center;
   justify-content:center;
   cursor: grab;
-  z-index: 40;
+  z-index: 2;
   animation: envelope-drift 6.5s ease-in-out infinite;
   touch-action: none;
   user-select: none;
@@ -730,4 +740,110 @@ section{
 a:focus-visible, button:focus-visible{
   outline: 2px solid var(--gold);
   outline-offset: 3px;
+}
+
+/* ---------------------------------------------
+   Hide-and-seek pixel sprites (bride & groom) —
+   a just-for-fun Easter egg. Self-contained: new
+   class names only, doesn't touch any rule above.
+--------------------------------------------- */
+.pixel-sprite{
+  position: fixed;
+  width: 56px;
+  height: 70px;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.pixel-sprite.visible{
+  opacity: 1;
+  pointer-events: auto;
+  animation: sprite-bounce 1.6s ease-in-out infinite;
+}
+
+.pixel-sprite svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes sprite-bounce{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.sprite-heart{
+  position: fixed;
+  font-size: 1rem;
+  color: var(--rose);
+  pointer-events: none;
+  z-index: 31;
+  animation: sprite-heart-pop 0.9s ease-out forwards;
+}
+
+@keyframes sprite-heart-pop{
+  0%   { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translate(var(--hx, 0px), -46px) scale(1); opacity: 0; }
+}
+
+/* ---------------------------------------------
+   Floating photos — tiny framed pictures that drift
+   upward inside the hero area, just like the hearts.
+   Purely decorative: no clicks, no full-page roaming.
+   Self-contained: new class names only.
+--------------------------------------------- */
+.floating-photo{
+  position: absolute;
+  bottom: -15%;
+  width: 46px;
+  padding: 4px 4px 8px;
+  border-radius: 3px;
+  box-shadow: 0 6px 14px rgba(58,30,54,0.28);
+  animation: photo-float-up linear infinite;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.floating-photo img{
+  width: 100%;
+  height: 40px;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+  background: var(--blush);
+}
+
+@keyframes photo-float-up{
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(-65vh) translateX(var(--drift, 20px)) rotate(8deg); opacity: 0; }
+}
+
+.photo-burst-heart{
+  position: fixed;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 31;
+  animation: sprite-heart-pop 0.9s ease-out forwards;
+}
+
+.floating-photo img.shake{
+  animation: photo-shake 0.5s ease;
+}
+
+@keyframes photo-shake{
+  0%, 100% { transform: rotate(0deg); }
+  20%      { transform: rotate(-8deg); }
+  40%      { transform: rotate(7deg); }
+  60%      { transform: rotate(-5deg); }
+  80%      { transform: rotate(4deg); }
 }
