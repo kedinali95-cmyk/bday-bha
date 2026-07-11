@@ -46,6 +46,26 @@ const NOTES = [
 ];
 
 /* ---------------------------------------------
+   Monthsary gift — a different note unlocks on the
+   14th of each month. Index 0 = January, 11 = December.
+   Edit any of these to make them yours.
+--------------------------------------------- */
+const MONTHSARY_MESSAGES = [
+  "Happy monthsary. Another year, another January spent loving you.",
+  "Happy monthsary. Cold days, warm heart — thanks to you.",
+  "Happy monthsary. Spring's arriving and so is another month of us.",
+  "Happy monthsary. Every month with you feels like a new favorite.",
+  "Happy monthsary. Here's to more late-night talks and easy laughs.",
+  "Happy monthsary. Summer's better because I get to share it with you.",
+  "Happy monthsary. It's your birthday month, so consider yourself extra spoiled.",
+  "Happy monthsary. Still choosing you, every single time.",
+  "Happy monthsary. Another month closer to forever.",
+  "Happy monthsary. The leaves are changing, but how I feel about you isn't.",
+  "Happy monthsary. Grateful for you, this month and always.",
+  "Happy monthsary. Closing out the year loving you more than when it started."
+];
+
+/* ---------------------------------------------
    Countdown calculation
 --------------------------------------------- */
 function daysUntilBirthday(){
@@ -86,6 +106,7 @@ function renderCountdown(){
 
   daysLeftGlobal = daysLeft;
   updateEnvelopeLockState();
+  updateGiftLockState();
 }
 
 /* ---------------------------------------------
@@ -119,7 +140,9 @@ function handleEnvelopeClick(){
 
 function showEnvelopeToast(){
   const toast = document.getElementById('envelopeToast');
-  if (!toast) return;
+  const envelope = document.getElementById('envelopeFloat');
+  if (!toast || !envelope) return;
+  positionToastNear(envelope, toast);
   toast.classList.add('show');
   clearTimeout(showEnvelopeToast._timer);
   showEnvelopeToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
@@ -135,6 +158,61 @@ function openLetter(){
 
 function closeLetter(){
   document.getElementById('letterModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ---------------------------------------------
+   Floating gift + monthsary note modal
+--------------------------------------------- */
+function isMonthsaryToday(){
+  return new Date().getDate() === 14;
+}
+
+function updateGiftLockState(){
+  const gift = document.getElementById('giftFloat');
+  if (!gift) return;
+
+  if (isMonthsaryToday()){
+    gift.classList.add('unlocked');
+  } else {
+    gift.classList.remove('unlocked');
+  }
+}
+
+function handleGiftClick(){
+  const gift = document.getElementById('giftFloat');
+
+  if (!isMonthsaryToday()){
+    showGiftToast();
+    gift.classList.remove('shake');
+    void gift.offsetWidth; // restart the shake animation
+    gift.classList.add('shake');
+  } else {
+    openGift();
+  }
+}
+
+function showGiftToast(){
+  const toast = document.getElementById('giftToast');
+  const gift = document.getElementById('giftFloat');
+  if (!toast || !gift) return;
+  positionToastNear(gift, toast);
+  toast.classList.add('show');
+  clearTimeout(showGiftToast._timer);
+  showGiftToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+function openGift(){
+  const giftTextEl = document.getElementById('giftText');
+  const monthIndex = new Date().getMonth();
+  if (giftTextEl) giftTextEl.textContent = MONTHSARY_MESSAGES[monthIndex];
+
+  document.getElementById('giftModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGift(){
+  document.getElementById('giftModal').classList.remove('open');
   document.body.style.overflow = '';
 }
 
@@ -185,5 +263,139 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
 
+/* ---------------------------------------------
+   Makes a floating object (envelope/gift) draggable
+   with mouse, trackpad, or touch, while still telling
+   a genuine tap from a drag apart.
+--------------------------------------------- */
+function makeDraggable(el, onTap, getHome){
+  if (!el) return;
+
+  let startX = 0, startY = 0, originLeft = 0, originTop = 0, dragged = false;
+  const DRAG_THRESHOLD = 6; // px of movement before it counts as a drag, not a tap
+
+  el.addEventListener('pointerdown', (e) => {
+    const rect = el.getBoundingClientRect();
+    originLeft = rect.left;
+    originTop = rect.top;
+    startX = e.clientX;
+    startY = e.clientY;
+    dragged = false;
+    el.classList.remove('returning');
+    el.classList.add('dragging');
+    el.setPointerCapture(e.pointerId);
+  });
+
+  el.addEventListener('pointermove', (e) => {
+    if (!el.classList.contains('dragging')) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) dragged = true;
+    if (!dragged) return;
+
+    const rect = el.getBoundingClientRect();
+    const margin = 8;
+    const maxLeft = window.innerWidth - rect.width - margin;
+    const maxTop = window.innerHeight - rect.height - margin;
+    const newLeft = Math.min(Math.max(originLeft + dx, margin), Math.max(maxLeft, margin));
+    const newTop = Math.min(Math.max(originTop + dy, margin), Math.max(maxTop, margin));
+
+    el.style.left = `${newLeft}px`;
+    el.style.top = `${newTop}px`;
+  });
+
+  const endDrag = () => {
+    if (!el.classList.contains('dragging')) return;
+    el.classList.remove('dragging');
+
+    if (!dragged){
+      onTap();
+      return;
+    }
+
+    // drifted off somewhere — ease it back home, like it's on a little string
+    const home = getHome();
+    el.classList.add('returning');
+    el.style.left = `${home.left}px`;
+    el.style.top = `${home.top}px`;
+
+    el.addEventListener('transitionend', function onDone(){
+      el.classList.remove('returning');
+      el.removeEventListener('transitionend', onDone);
+    }, { once: true });
+  };
+
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+}
+
+function positionToastNear(el, toast){
+  const rect = el.getBoundingClientRect();
+  toast.style.left = `${rect.left + rect.width / 2}px`;
+
+  // measure the toast so it can be centered/clamped once it has real dimensions
+  toast.style.transform = 'translate(-50%, 0)';
+  const toastRect = toast.getBoundingClientRect();
+  const margin = 8;
+  let left = rect.left + rect.width / 2;
+  left = Math.min(Math.max(left, toastRect.width / 2 + margin), window.innerWidth - toastRect.width / 2 - margin);
+  toast.style.left = `${left}px`;
+
+  let top = rect.top - toastRect.height - 12;
+  if (top < margin) top = rect.bottom + 12;
+  toast.style.top = `${top}px`;
+}
+
+/* ---------------------------------------------
+   Tap a polaroid's frame to cycle its color
+   (tapping the photo itself still opens the lightbox)
+--------------------------------------------- */
+const POLAROID_COLORS = [
+  '#FFFFFF', // default
+  '#F6DFE3', // blush
+  '#F7C9CE', // rose
+  '#E3D3F0', // lavender
+  '#D8F0E3', // mint
+  '#FCE1C8', // peach
+  '#D6E9F5', // sky blue
+  '#FBEFC0', // butter yellow
+  '#EAD9F7', // lilac
+  '#F9D2C2'  // coral
+];
+
+function setupPolaroidColorCycle(){
+  document.querySelectorAll('.polaroid').forEach((frame) => {
+    let colorIndex = 0;
+    frame.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') return; // photo taps open the lightbox instead
+      colorIndex = (colorIndex + 1) % POLAROID_COLORS.length;
+      frame.style.backgroundColor = POLAROID_COLORS[colorIndex];
+    });
+  });
+}
+
 renderCountdown();
 spawnHearts();
+setupPolaroidColorCycle();
+makeDraggable(
+  document.getElementById('envelopeFloat'),
+  handleEnvelopeClick,
+  () => ({ left: window.innerWidth - 84, top: window.innerHeight - 84 })
+);
+makeDraggable(
+  document.getElementById('giftFloat'),
+  handleGiftClick,
+  () => ({ left: 20, top: window.innerHeight - 84 })
+);
+
+window.addEventListener('resize', () => {
+  [document.getElementById('envelopeFloat'), document.getElementById('giftFloat')].forEach((el) => {
+    if (!el || !el.style.left) return; // hasn't been dragged yet, leave it on its CSS default spot
+    const rect = el.getBoundingClientRect();
+    const margin = 8;
+    const maxLeft = window.innerWidth - rect.width - margin;
+    const maxTop = window.innerHeight - rect.height - margin;
+    el.style.left = `${Math.min(Math.max(rect.left, margin), Math.max(maxLeft, margin))}px`;
+    el.style.top = `${Math.min(Math.max(rect.top, margin), Math.max(maxTop, margin))}px`;
+  });
+});
