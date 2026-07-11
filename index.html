@@ -69,7 +69,7 @@
     </div>
 
     <!-- floating envelope, locked until her birthday -->
-    <button class="envelope-float" id="envelopeFloat" type="button" aria-label="Open your birthday letter" onclick="handleEnvelopeClick()">
+    <button class="envelope-float" id="envelopeFloat" type="button" aria-label="Open your birthday letter">
       <span class="envelope-float-icon">&#128140;</span>
       <span class="envelope-float-lock" id="envelopeLock">&#128274;</span>
     </button>
@@ -94,6 +94,24 @@
             <figcaption>&#9825;</figcaption>
           </figure>
         </div>
+      </div>
+    </div>
+
+    <!-- floating gift, locked except on the 14th of each month (monthsary) -->
+    <button class="gift-float" id="giftFloat" type="button" aria-label="Open your monthsary gift">
+      <span class="gift-float-icon">&#127873;</span>
+      <span class="gift-float-lock" id="giftLock">&#128274;</span>
+    </button>
+
+    <div class="gift-toast" id="giftToast">not the 14th yet <span>&#10084;&#65039;</span></div>
+
+    <!-- monthsary gift, unlocked only on the 14th -->
+    <div class="gift-modal" id="giftModal">
+      <div class="gift-card">
+        <button class="gift-close" type="button" aria-label="Close gift" onclick="closeGift()">&times;</button>
+        <p class="gift-eyebrow">happy monthsary</p>
+        <p class="gift-text" id="giftText"></p>
+        <p class="gift-signoff">Here's to another month of us.</p>
       </div>
     </div>
 
