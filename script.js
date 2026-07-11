@@ -76,6 +76,19 @@ function daysUntilBirthday(){
   return Math.round((target - startOfToday) / msPerDay);
 }
 
+/* ---------------------------------------------
+   A different countdown-number color for every day,
+   drifting from violet (further out) to pink (closer)
+   and landing on gold for her birthday itself.
+--------------------------------------------- */
+function getCountdownColor(daysLeft){
+  if (daysLeft <= 0) return '#D8A85E'; // gold, birthday day
+
+  const clampedDays = Math.min(daysLeft, 20); // 20+ days out all share the furthest violet
+  const hue = 280 + ((20 - clampedDays) * (70 / 19)); // 280 (violet) -> 350 (pink) as the day gets closer
+  return `hsl(${hue.toFixed(1)}, 58%, 74%)`;
+}
+
 function renderCountdown(){
   const daysLeft = daysUntilBirthday();
   const numberEl = document.getElementById('countNumber');
@@ -83,6 +96,10 @@ function renderCountdown(){
   const noteEl = document.getElementById('noteOfDay');
   const pillEl = document.getElementById('datePill');
   const heroNoteEl = document.getElementById('heroNote');
+
+  numberEl.style.background = `linear-gradient(180deg, #FBF3EE 0%, ${getCountdownColor(daysLeft)} 100%)`;
+  numberEl.style.webkitBackgroundClip = 'text';
+  numberEl.style.backgroundClip = 'text';
 
   if (daysLeft > 0){
     numberEl.textContent = daysLeft;
@@ -268,16 +285,18 @@ document.addEventListener('keydown', (e) => {
    with mouse, trackpad, or touch, while still telling
    a genuine tap from a drag apart.
 --------------------------------------------- */
-function makeDraggable(el, onTap, getHome){
+function makeDraggable(el, onTap, getHome, containerEl){
   if (!el) return;
 
   let startX = 0, startY = 0, originLeft = 0, originTop = 0, dragged = false;
+  let containerRect = null;
   const DRAG_THRESHOLD = 6; // px of movement before it counts as a drag, not a tap
 
   el.addEventListener('pointerdown', (e) => {
+    containerRect = (containerEl || document.body).getBoundingClientRect();
     const rect = el.getBoundingClientRect();
-    originLeft = rect.left;
-    originTop = rect.top;
+    originLeft = rect.left - containerRect.left;
+    originTop = rect.top - containerRect.top;
     startX = e.clientX;
     startY = e.clientY;
     dragged = false;
@@ -295,8 +314,8 @@ function makeDraggable(el, onTap, getHome){
 
     const rect = el.getBoundingClientRect();
     const margin = 8;
-    const maxLeft = window.innerWidth - rect.width - margin;
-    const maxTop = window.innerHeight - rect.height - margin;
+    const maxLeft = containerRect.width - rect.width - margin;
+    const maxTop = containerRect.height - rect.height - margin;
     const newLeft = Math.min(Math.max(originLeft + dx, margin), Math.max(maxLeft, margin));
     const newTop = Math.min(Math.max(originTop + dy, margin), Math.max(maxTop, margin));
 
@@ -377,25 +396,240 @@ function setupPolaroidColorCycle(){
 renderCountdown();
 spawnHearts();
 setupPolaroidColorCycle();
+
+const heroEl = document.querySelector('.hero');
+
 makeDraggable(
   document.getElementById('envelopeFloat'),
   handleEnvelopeClick,
-  () => ({ left: window.innerWidth - 84, top: window.innerHeight - 84 })
+  () => ({ left: heroEl.clientWidth - 84, top: heroEl.clientHeight - 84 }),
+  heroEl
 );
 makeDraggable(
   document.getElementById('giftFloat'),
   handleGiftClick,
-  () => ({ left: 20, top: window.innerHeight - 84 })
+  () => ({ left: 20, top: heroEl.clientHeight - 84 }),
+  heroEl
 );
 
 window.addEventListener('resize', () => {
+  if (!heroEl) return;
+  const containerRect = heroEl.getBoundingClientRect();
+
   [document.getElementById('envelopeFloat'), document.getElementById('giftFloat')].forEach((el) => {
     if (!el || !el.style.left) return; // hasn't been dragged yet, leave it on its CSS default spot
     const rect = el.getBoundingClientRect();
     const margin = 8;
-    const maxLeft = window.innerWidth - rect.width - margin;
-    const maxTop = window.innerHeight - rect.height - margin;
-    el.style.left = `${Math.min(Math.max(rect.left, margin), Math.max(maxLeft, margin))}px`;
-    el.style.top = `${Math.min(Math.max(rect.top, margin), Math.max(maxTop, margin))}px`;
+    const maxLeft = containerRect.width - rect.width - margin;
+    const maxTop = containerRect.height - rect.height - margin;
+    const relativeLeft = rect.left - containerRect.left;
+    const relativeTop = rect.top - containerRect.top;
+    el.style.left = `${Math.min(Math.max(relativeLeft, margin), Math.max(maxLeft, margin))}px`;
+    el.style.top = `${Math.min(Math.max(relativeTop, margin), Math.max(maxTop, margin))}px`;
   });
 });
+
+/* ---------------------------------------------
+   Hide-and-seek pixel sprites — a tiny Easter egg
+   for when she's bored. Fully self-contained: new
+   functions only, doesn't call or alter anything above.
+--------------------------------------------- */
+const BRIDE_GRID = [
+  [0,0,2,2,2,2,0,0],
+  [0,2,2,2,2,2,2,0],
+  [0,2,1,1,1,1,2,0],
+  [0,0,1,1,1,1,0,0],
+  [0,0,0,3,3,0,0,0],
+  [0,0,3,3,3,3,0,0],
+  [0,3,3,3,3,3,3,0],
+  [0,3,3,4,4,3,3,0],
+  [3,3,3,3,3,3,3,3],
+  [3,3,0,0,0,0,3,3]
+];
+
+const GROOM_GRID = [
+  [0,0,2,2,2,2,0,0],
+  [0,2,2,2,2,2,2,0],
+  [0,2,1,1,1,1,2,0],
+  [0,0,1,1,1,1,0,0],
+  [0,0,0,4,4,0,0,0],
+  [0,0,3,3,3,3,0,0],
+  [0,3,3,3,3,3,3,0],
+  [0,3,3,1,1,3,3,0],
+  [0,3,3,3,3,3,3,0],
+  [0,3,0,0,0,0,3,0]
+];
+
+const BRIDE_COLORS = { 1: 'var(--cream)', 2: 'var(--blush)', 3: 'var(--rose)', 4: 'var(--gold)' };
+const GROOM_COLORS = { 1: 'var(--cream)', 2: 'var(--blush)', 3: 'var(--plum-mid)', 4: 'var(--gold)' };
+
+function buildPixelSpriteSVG(grid, colorMap){
+  const rows = grid.length;
+  const cols = grid[0].length;
+  let rects = '';
+  grid.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (!cell) return;
+      rects += `<rect x="${x}" y="${y}" width="1" height="1" style="fill:${colorMap[cell]}"/>`;
+    });
+  });
+  return `<svg viewBox="0 0 ${cols} ${rows}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+}
+
+function createPixelSprite(kind){
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'pixel-sprite';
+  btn.setAttribute('aria-label', kind === 'bride' ? 'A tiny hidden bride' : 'A tiny hidden groom');
+  btn.innerHTML = kind === 'bride'
+    ? buildPixelSpriteSVG(BRIDE_GRID, BRIDE_COLORS)
+    : buildPixelSpriteSVG(GROOM_GRID, GROOM_COLORS);
+  document.body.appendChild(btn);
+  return btn;
+}
+
+function popSpriteHearts(x, y){
+  for (let i = 0; i < 5; i++){
+    const heart = document.createElement('span');
+    heart.className = 'sprite-heart';
+    heart.textContent = '\u2665';
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    heart.style.setProperty('--hx', `${(Math.random() * 40) - 20}px`);
+    heart.style.animationDelay = `${i * 0.06}s`;
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+function initHideAndSeekSprites(){
+  const bride = createPixelSprite('bride');
+  const groom = createPixelSprite('groom');
+  const sprites = [bride, groom];
+  let hideTimer = null;
+
+  function placeRandomly(el){
+    const margin = 24;
+    const width = el.offsetWidth || 56;
+    const height = el.offsetHeight || 70;
+    const maxLeft = Math.max(window.innerWidth - width - margin, margin);
+    const maxTop = Math.max(window.innerHeight - height - margin, margin);
+    const left = margin + Math.random() * (maxLeft - margin);
+    const top = margin + Math.random() * (maxTop - margin);
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+  }
+
+  function showRandomSprite(){
+    // stay out of the way if the letter, gift, or a photo is open
+    const somethingElseOpen = document.querySelector('.letter-modal.open, .gift-modal.open, .lightbox.open');
+    if (somethingElseOpen){
+      scheduleNext(3000);
+      return;
+    }
+
+    const el = sprites[Math.floor(Math.random() * sprites.length)];
+    placeRandomly(el);
+    el.classList.add('visible');
+
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      el.classList.remove('visible');
+      scheduleNext();
+    }, 5000);
+  }
+
+  function scheduleNext(customDelay){
+    const delay = customDelay || (10000 + Math.random() * 12000); // roughly every 10-22s
+    setTimeout(showRandomSprite, delay);
+  }
+
+  sprites.forEach((el) => {
+    el.addEventListener('click', () => {
+      const rect = el.getBoundingClientRect();
+      popSpriteHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      el.classList.remove('visible');
+      clearTimeout(hideTimer);
+      scheduleNext(2500); // found early — reward with a shorter wait for the next one
+    });
+  });
+
+  scheduleNext(6000); // first appearance shortly after the page loads
+}
+
+initHideAndSeekSprites();
+
+/* ---------------------------------------------
+   Floating photos — tiny framed pictures that drift
+   upward inside the hero area, just like the hearts.
+   Tapping one pops a little 3-color heart burst but
+   never hides or removes the photo. Fully self-
+   contained: new functions only, doesn't alter or
+   call anything above.
+
+   For now these pull from the same photos/ folder as
+   the gallery. Once you have a dedicated set, just
+   change FLOATING_PHOTO_FOLDER below (e.g. to
+   'floating-photos/') and update the filenames.
+--------------------------------------------- */
+const FLOATING_PHOTO_FOLDER = 'photos/';
+const FLOATING_PHOTO_FILES = Array.from({ length: 20 }, (_, i) => `${i + 1}.jpg`); // 1.jpg ... 20.jpg — replace with your own filenames anytime
+const FLOATING_PHOTO_COUNT = 20; // how many drift at once inside the hero area
+const PHOTO_BURST_HEART_COLORS = ['var(--rose)', 'var(--gold)', '#C9A0F0']; // 3 heart colors for the burst
+
+function popPhotoBurstHearts(x, y){
+  for (let i = 0; i < 6; i++){
+    const heart = document.createElement('span');
+    heart.className = 'photo-burst-heart';
+    heart.textContent = '\u2665';
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    heart.style.color = PHOTO_BURST_HEART_COLORS[i % PHOTO_BURST_HEART_COLORS.length];
+    heart.style.setProperty('--hx', `${(Math.random() * 50) - 25}px`);
+    heart.style.animationDelay = `${i * 0.05}s`;
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+function spawnFloatingPhotos(){
+  const container = document.getElementById('hearts');
+  if (!container) return;
+
+  for (let i = 0; i < FLOATING_PHOTO_COUNT; i++){
+    const filename = FLOATING_PHOTO_FILES[i % FLOATING_PHOTO_FILES.length];
+
+    // keep clear of the middle: land in the left band (0-28%) or the right band (72-100%)
+    const onLeft = Math.random() < 0.5;
+    const horizontalPos = onLeft ? Math.random() * 28 : 72 + Math.random() * 28;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'floating-photo';
+    wrap.style.left = `${horizontalPos}%`;
+    wrap.style.setProperty('--drift', `${(Math.random() * 30) - 15}px`); // gentle drift, won't wander into the middle
+    wrap.style.animationDuration = `${16 + Math.random() * 10}s`;
+    wrap.style.animationDelay = `${Math.random() * 18}s`;
+    wrap.style.backgroundColor = typeof POLAROID_COLORS !== 'undefined'
+      ? POLAROID_COLORS[Math.floor(Math.random() * POLAROID_COLORS.length)]
+      : '#FFFFFF';
+
+    const img = document.createElement('img');
+    img.src = `${FLOATING_PHOTO_FOLDER}${filename}`;
+    img.alt = '';
+    img.onerror = () => { wrap.style.display = 'none'; }; // just skip this one if it fails to load
+
+    wrap.appendChild(img);
+    wrap.addEventListener('click', () => {
+      const rect = wrap.getBoundingClientRect();
+      popPhotoBurstHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      // no hide/remove here on purpose — the photo just keeps floating
+
+      img.classList.remove('shake');
+      void img.offsetWidth; // restart the shake animation if clicked again mid-shake
+      img.classList.add('shake');
+    });
+    container.appendChild(wrap);
+  }
+}
+
+spawnFloatingPhotos();
