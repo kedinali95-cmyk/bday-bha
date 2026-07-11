@@ -84,43 +84,58 @@ function renderCountdown(){
   const noteIndex = Math.min(Math.max(daysLeft, 0), NOTES.length - 1);
   noteEl.textContent = NOTES[noteIndex];
 
-  // switch from the daily countdown view to the birthday envelope
-  // reveal automatically once her birthday arrives
-  const envelopeSection = document.getElementById('envelopeSection');
-  const notesSection = document.getElementById('notesSection');
-  if (daysLeft <= 0){
-    envelopeSection.style.display = 'block';
-    notesSection.style.display = 'none';
-  } else {
-    envelopeSection.style.display = 'none';
-    notesSection.style.display = 'block';
-  }
+  daysLeftGlobal = daysLeft;
+  updateEnvelopeLockState();
 }
 
 /* ---------------------------------------------
-   Envelope + love letter
+   Floating envelope + love letter modal
 --------------------------------------------- */
-function initEnvelope(){
+let daysLeftGlobal = 0;
+
+function updateEnvelopeLockState(){
+  const envelope = document.getElementById('envelopeFloat');
+  if (!envelope) return;
+
+  if (daysLeftGlobal <= 0){
+    envelope.classList.add('unlocked');
+  } else {
+    envelope.classList.remove('unlocked');
+  }
+}
+
+function handleEnvelopeClick(){
+  const envelope = document.getElementById('envelopeFloat');
+
+  if (daysLeftGlobal > 0){
+    showEnvelopeToast();
+    envelope.classList.remove('shake');
+    void envelope.offsetWidth; // restart the shake animation
+    envelope.classList.add('shake');
+  } else {
+    openLetter();
+  }
+}
+
+function showEnvelopeToast(){
+  const toast = document.getElementById('envelopeToast');
+  if (!toast) return;
+  toast.classList.add('show');
+  clearTimeout(showEnvelopeToast._timer);
+  showEnvelopeToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+function openLetter(){
   const letterTextEl = document.getElementById('letterText');
   if (letterTextEl) letterTextEl.textContent = LOVE_LETTER;
 
-  const envelope = document.getElementById('envelope');
-  const loveLetter = document.getElementById('loveLetter');
-  const hint = document.getElementById('envelopeHint');
-  if (!envelope) return;
+  document.getElementById('letterModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
-  envelope.addEventListener('click', () => {
-    const isOpen = envelope.classList.toggle('open');
-    envelope.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-
-    if (isOpen){
-      hint.style.opacity = '0';
-      setTimeout(() => loveLetter.classList.add('visible'), 350);
-    } else {
-      loveLetter.classList.remove('visible');
-      hint.style.opacity = '1';
-    }
-  });
+function closeLetter(){
+  document.getElementById('letterModal').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 /* ---------------------------------------------
@@ -172,4 +187,3 @@ document.addEventListener('keydown', (e) => {
 
 renderCountdown();
 spawnHearts();
-initEnvelope();
