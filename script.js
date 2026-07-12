@@ -28,8 +28,8 @@ const NOTES = [
   "Three. I keep thinking about your laugh.",                                    // 3
   "Four days out and I'm already planning your favorite breakfast.",             // 4
   "Five. You make ordinary days feel like something worth celebrating.",         // 5
-  "HAPPY MONTHSARY, Ako nauna nakaalala tabalangpaopao mwehehehhe",                 // 6
-  "A week away. miss ka na ni mikoy bhalangpaopao.",                           // 7
+  "Six days left, and I still can't believe I get to be yours.",                 // 6
+  "A week away. I've been smiling about it all day.",                           // 7
   "Eight. Thinking of every reason you're worth celebrating.",                   // 8
   "Nine days. I love the way you see the world.",                               // 9
   "Ten! Halfway there and my excitement is not halved at all.",                  // 10
@@ -133,9 +133,17 @@ let daysLeftGlobal = 0;
 
 function updateEnvelopeLockState(){
   const envelope = document.getElementById('envelopeFloat');
+  const toast = document.getElementById('envelopeToast');
   if (!envelope) return;
 
-  if (daysLeftGlobal <= 0){
+  if (daysLeftGlobal < 0){
+    // her birthday has passed — the envelope's job is done, the monthsary gift takes over
+    envelope.style.display = 'none';
+    if (toast) toast.style.display = 'none';
+    return;
+  }
+
+  if (daysLeftGlobal === 0){
     envelope.classList.add('unlocked');
   } else {
     envelope.classList.remove('unlocked');
