@@ -28,8 +28,8 @@ const NOTES = [
   "Three. I keep thinking about your laugh.",                                    // 3
   "Four days out and I'm already planning your favorite breakfast.",             // 4
   "Five. You make ordinary days feel like something worth celebrating.",         // 5
-  "Six days left, and I still can't believe I get to be yours.",                 // 6
-  "A week away. I've been smiling about it all day.",                           // 7
+  "HAPPY MONTHSARY, Ako nauna nakaalala tabalangpaopao mwehehehhe",                 // 6
+  "A week away. miss ka na ni mikoy bhalangpaopao.",                           // 7
   "Eight. Thinking of every reason you're worth celebrating.",                   // 8
   "Nine days. I love the way you see the world.",                               // 9
   "Ten! Halfway there and my excitement is not halved at all.",                  // 10
@@ -633,3 +633,23 @@ function spawnFloatingPhotos(){
 }
 
 spawnFloatingPhotos();
+
+/* ---------------------------------------------
+   Keep the countdown live — checks every 30s whether
+   the calendar day has changed, and if so, re-renders
+   automatically without needing a manual refresh.
+   Self-contained: doesn't alter anything above.
+--------------------------------------------- */
+function watchForDayChange(){
+  let lastSeenDate = new Date().toDateString();
+
+  setInterval(() => {
+    const currentDate = new Date().toDateString();
+    if (currentDate !== lastSeenDate){
+      lastSeenDate = currentDate;
+      renderCountdown();
+    }
+  }, 30000); // check twice a minute — light enough to leave running, quick enough to feel instant
+}
+
+watchForDayChange();
