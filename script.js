@@ -661,3 +661,32 @@ function watchForDayChange(){
 }
 
 watchForDayChange();
+
+/* ---------------------------------------------
+   Birthday-eve celebration floats — balloons, red
+   hearts, sparkles, and confetti drifting through the
+   hero area to build a little anticipation for
+   tomorrow. Fully self-contained: new function only,
+   doesn't alter or call anything above.
+--------------------------------------------- */
+const CELEBRATION_GLYPHS = ['\u{1F388}', '\u2764\uFE0F', '\u2728', '\u{1F389}']; // balloon, red heart, sparkles, confetti popper
+
+function spawnCelebrationFloats(){
+  const container = document.getElementById('hearts');
+  if (!container) return;
+
+  const count = 10;
+  for (let i = 0; i < count; i++){
+    const el = document.createElement('span');
+    el.className = 'celebration-float';
+    el.textContent = CELEBRATION_GLYPHS[Math.floor(Math.random() * CELEBRATION_GLYPHS.length)];
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.fontSize = `${1.3 + Math.random() * 1.1}rem`;
+    el.style.setProperty('--drift', `${(Math.random() * 60) - 30}px`);
+    el.style.animationDuration = `${11 + Math.random() * 9}s`;
+    el.style.animationDelay = `${Math.random() * 12}s`;
+    container.appendChild(el);
+  }
+}
+
+spawnCelebrationFloats();
