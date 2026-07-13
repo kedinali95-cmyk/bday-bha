@@ -847,3 +847,18 @@ a:focus-visible, button:focus-visible{
   60%      { transform: rotate(-5deg); }
   80%      { transform: rotate(4deg); }
 }
+
+/* ---------------------------------------------
+   Birthday-eve celebration floats — balloons, red
+   hearts, sparkles, confetti drifting in the hero
+   area to build anticipation. Self-contained: new
+   class name only, reuses the existing float-up
+   keyframe already used by the ambient hearts.
+--------------------------------------------- */
+.celebration-float{
+  position: absolute;
+  bottom: -12%;
+  pointer-events: none;
+  user-select: none;
+  animation: float-up linear infinite;
+}
