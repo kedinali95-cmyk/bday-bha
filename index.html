@@ -17,6 +17,18 @@
     <section class="hero">
       <div class="hearts" id="hearts" aria-hidden="true"></div>
 
+      <!-- floating envelope, locked until her birthday -->
+      <button class="envelope-float" id="envelopeFloat" type="button" aria-label="Open your birthday letter">
+        <span class="envelope-float-icon">&#128140;</span>
+        <span class="envelope-float-lock" id="envelopeLock">&#128274;</span>
+      </button>
+
+      <!-- floating gift, locked except on the 14th of each month (monthsary) -->
+      <button class="gift-float" id="giftFloat" type="button" aria-label="Open your monthsary gift">
+        <span class="gift-float-icon">&#127873;</span>
+        <span class="gift-float-lock" id="giftLock">&#128274;</span>
+      </button>
+
       <div class="hero-content">
         <p class="eyebrow">a little countdown, just for you</p>
 
@@ -72,11 +84,6 @@
     </div>
 
     <!-- floating envelope, locked until her birthday -->
-    <button class="envelope-float" id="envelopeFloat" type="button" aria-label="Open your birthday letter">
-      <span class="envelope-float-icon">&#128140;</span>
-      <span class="envelope-float-lock" id="envelopeLock">&#128274;</span>
-    </button>
-
     <div class="envelope-toast" id="envelopeToast">not your birthday yet <span>&#10084;&#65039;</span></div>
 
     <!-- love letter, unlocked from her birthday onward -->
@@ -85,15 +92,15 @@
         <button class="letter-close" type="button" aria-label="Close letter" onclick="closeLetter()">&times;</button>
         <p class="letter-eyebrow">happy birthday</p>
         <p class="letter-text" id="letterText"></p>
-        <p class="letter-signoff">Forever yours,<br>Me</p>
+        <p class="letter-signoff">Forever yours,<br>Bhabhalong</p>
 
         <div class="letter-photos">
           <figure class="polaroid tilt-a">
-            <img src="photos/letter1.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
+            <img src="bday-phot/1.1.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
             <figcaption>&#9825;</figcaption>
           </figure>
           <figure class="polaroid tilt-b">
-            <img src="photos/letter2.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
+            <img src="bday-phot/1.2.jpg" alt="A memory of us" onerror="this.closest('.polaroid').classList.add('placeholder')" onclick="openLightbox(this)">
             <figcaption>&#9825;</figcaption>
           </figure>
         </div>
@@ -101,11 +108,6 @@
     </div>
 
     <!-- floating gift, locked except on the 14th of each month (monthsary) -->
-    <button class="gift-float" id="giftFloat" type="button" aria-label="Open your monthsary gift">
-      <span class="gift-float-icon">&#127873;</span>
-      <span class="gift-float-lock" id="giftLock">&#128274;</span>
-    </button>
-
     <div class="gift-toast" id="giftToast">not the 14th yet <span>&#10084;&#65039;</span></div>
 
     <!-- monthsary gift, unlocked only on the 14th -->
@@ -119,8 +121,8 @@
     </div>
 
     <section class="footer-section">
-      <p class="signoff">Until then, I'll be here counting the days.</p>
-      <p class="signoff-sub">Happy almost-birthday. I love you.</p>
+      <p class="signoff">Ang babaeng pinili ko na makasama sa habang buhay</p>
+      <p class="signoff-sub">Happy birthday Tabhalangpaopao. I love you and thank you sa pag-piling ayusin kaysa tapusin.</p>
     </section>
   </main>
 
